@@ -1,3 +1,8 @@
+raw-data/
+query-service/ffxiv.db
+.DS_Store
+__pycache__
+
 # Logs
 logs
 *.log
