@@ -1,0 +1,27 @@
+.display {
+    width: min(1200px, 95%);
+    display: inline-block;
+    justify-content: center;
+}
+
+.display p {
+    text-align: justify;
+}
+
+.speakerName {
+    float: left;
+    font-size: small;
+}
+
+.conversationName {
+    float: right;
+    font-size: small;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}

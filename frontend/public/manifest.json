@@ -1,0 +1,10 @@
+{
+  "short_name": "Hades Script",
+  "name": "Search the script of the 2018 game Hades",
+  "icons": [
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

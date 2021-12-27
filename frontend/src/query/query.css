@@ -1,0 +1,33 @@
+.query {
+    display: inline-block; 
+    justify-content: center; 
+    white-space: wrap;
+}
+
+.selectors {
+  width: 80vw;
+  margin-bottom: 10px;
+  display: inline-block; 
+}
+
+.speaker-select {
+  border: 0px;
+  border-radius: 0px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  background-color: white;
+  font-size: min(20px, 3vw);
+}
+
+.matchString {
+  margin-bottom: 12px
+}
+
+.matchString label {
+  font-size: min(20px, 3vw);
+}
+
+input {
+  margin-left: 4px;
+}
