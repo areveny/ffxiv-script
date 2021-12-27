@@ -69,7 +69,6 @@ app.post("/quest", (req, res) => {
 app.post("/", (req, res) => {
     var startTime = performance.now()
     var preparedStatement = getStatement(req.body)
-    console.log(preparedStatement)
     preparedStatement.all( function (err, rows) {
         res.json(rows)
     })

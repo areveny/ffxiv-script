@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import LinesDisplay from '../../linesDisplay/linesDisplay';
 import Result from '../../models/models';
-import { serverUrl } from '../../static';
+import { serverUrl, speakers } from '../../static';
 import './display.css';
 
 interface DisplayProps {
@@ -36,14 +36,8 @@ class Display extends React.Component<DisplayProps, DisplayState> {
     this.state = { 'results': new Array<Result>() }
   }
 
-  runQuery = () => {
-    axios.post(serverUrl,
-      {
-        'matchString': this.props.matchString,
-        'matchSpeaker': cleanSpeakerString(this.props.matchSpeaker),
-        'minLevel': this.props.minLevel,
-        'maxLevel': this.props.maxLevel
-      },
+  runQuery = (requestBody: DisplayProps) => {
+    axios.post(serverUrl, requestBody,
       { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {
         this.setState({ 'results': response.data })
@@ -51,11 +45,20 @@ class Display extends React.Component<DisplayProps, DisplayState> {
   }
 
   componentDidUpdate(prevProps: DisplayProps) {
-    if (this.props.matchString !== prevProps.matchString || 
+    var matchSpeakerCleaned = cleanSpeakerString(this.props.matchSpeaker)
+    if (this.props.matchString !== prevProps.matchString ||
       this.props.matchSpeaker != prevProps.matchSpeaker ||
       this.props.minLevel != prevProps.minLevel ||
       this.props.maxLevel != prevProps.maxLevel) {
-      this.runQuery()
+      if (speakers.has(matchSpeakerCleaned)) {
+        var requestBody = {
+          'matchString': this.props.matchString,
+          'matchSpeaker': matchSpeakerCleaned,
+          'minLevel': this.props.minLevel,
+          'maxLevel': this.props.maxLevel
+        }
+        this.runQuery(requestBody)
+      }
     }
   }
 

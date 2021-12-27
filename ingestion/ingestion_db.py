@@ -75,6 +75,12 @@ class SqliteIngestionDB(IngestionDB):
             con.executemany('INSERT OR REPLACE INTO places (place_id, place_name) VALUES (?, ?)', place_values)
         con.close()
 
+def generate_speakers(db_file):
+    distinct_speakers = 'SELECT DISTINCT speaker FROM lines;'
+    con = sqlite3.connect(db_file)
+    speakers = con.execute(distinct_speakers).fetchall()
+    speakers = [tup[0] for tup in speakers]
+    print(speakers)
 
 if __name__ == '__main__':
     con = sqlite3.connect('../query-service/ffxiv.db')
@@ -85,6 +91,5 @@ if __name__ == '__main__':
     quests = 'select * from quests WHERE quest_id="clshrv530_02049" ORDER BY rowid'
 
     join_query = 'select * from lines, quests WHERE lines.quest_id = quests.quest_id and quests.quest_id="clshrv530_02049" ORDER BY lines.rowid LIMIT 10'
-    results = con.execute(join_query).fetchall()
-    print(results)
     
+    generate_speakers('../query-service/ffxiv.db')
