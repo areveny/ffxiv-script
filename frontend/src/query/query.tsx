@@ -6,6 +6,8 @@ import './query.css';
 interface QueryState {
   matchString: string;
   matchSpeaker: string;
+  minLevel: number;
+  maxLevel: number;
 }
 
 class Query extends React.Component<any, QueryState> {
@@ -16,7 +18,9 @@ class Query extends React.Component<any, QueryState> {
     super(props)
     this.state = {
       'matchSpeaker': '',
-      'matchString': ''
+      'matchString': '',
+      'minLevel': 1,
+      'maxLevel': 90
     }
   }
 
@@ -24,6 +28,7 @@ class Query extends React.Component<any, QueryState> {
     var element = (e.currentTarget as HTMLInputElement)
     const {className, value} = (e.currentTarget as HTMLInputElement)
     this.setState({[className]: value } as Pick<State, keyof State>)
+    console.log(this.state)
   }
 
   render() {
@@ -35,7 +40,11 @@ class Query extends React.Component<any, QueryState> {
         <div className="matchInput">
           <label> Match text: <input className='matchString' type='text' value={this.state.matchString} onChange={this.handleChange} /> </label>
         </div>
-        <Display matchString={this.state.matchString} matchSpeaker={this.state.matchSpeaker}/>
+        <div className="levelRange">
+          <label> Min level: <input className='minLevel' type='number' value={this.state.minLevel} onChange={this.handleChange} /> </label>
+          <label> Max level: <input className='maxLevel' type='number' value={this.state.maxLevel} onChange={this.handleChange} /> </label>
+        </div>
+        <Display matchString={this.state.matchString} matchSpeaker={this.state.matchSpeaker} minLevel={this.state.minLevel} maxLevel={this.state.maxLevel}/>
       </div>
     );
   }

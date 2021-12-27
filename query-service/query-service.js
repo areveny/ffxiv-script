@@ -22,6 +22,14 @@ function getStatement(queryProps) {
         filters.push(` speaker=?`)
         params.push(queryProps.matchSpeaker)
     }
+    if (queryProps.minLevel > 1) {
+        filters.push(' quests.level>?')
+        params.push(queryProps.minLevel)
+    }
+    if (queryProps.maxLevel < 90) {
+        filters.push(' quests.level<?')
+        params.push(queryProps.maxLevel)
+    }
     if (filters.length > 0) {
         filterText = ` AND ${filters.join(' AND ')}`
     }
@@ -61,6 +69,7 @@ app.post("/quest", (req, res) => {
 app.post("/", (req, res) => {
     var startTime = performance.now()
     var preparedStatement = getStatement(req.body)
+    console.log(preparedStatement)
     preparedStatement.all( function (err, rows) {
         res.json(rows)
     })

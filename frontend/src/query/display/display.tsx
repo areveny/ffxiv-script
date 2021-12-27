@@ -8,6 +8,8 @@ import './display.css';
 interface DisplayProps {
   matchString: string;
   matchSpeaker: string;
+  minLevel: number;
+  maxLevel: number;
 }
 
 interface DisplayState {
@@ -39,6 +41,8 @@ class Display extends React.Component<DisplayProps, DisplayState> {
       {
         'matchString': this.props.matchString,
         'matchSpeaker': cleanSpeakerString(this.props.matchSpeaker),
+        'minLevel': this.props.minLevel,
+        'maxLevel': this.props.maxLevel
       },
       { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {
@@ -47,7 +51,10 @@ class Display extends React.Component<DisplayProps, DisplayState> {
   }
 
   componentDidUpdate(prevProps: DisplayProps) {
-    if (this.props.matchString !== prevProps.matchString || this.props.matchSpeaker != prevProps.matchSpeaker) {
+    if (this.props.matchString !== prevProps.matchString || 
+      this.props.matchSpeaker != prevProps.matchSpeaker ||
+      this.props.minLevel != prevProps.minLevel ||
+      this.props.maxLevel != prevProps.maxLevel) {
       this.runQuery()
     }
   }

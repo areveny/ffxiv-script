@@ -24,10 +24,14 @@
   margin-bottom: 12px
 }
 
-.matchInput label {
+label {
   font-size: min(20px, 3vw);
 }
 
 input {
   margin-left: 4px;
+}
+
+.levelRange  input{
+  width: 40px;
 }

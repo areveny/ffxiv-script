@@ -20,7 +20,6 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
         <div className='display'>
           {this.props.lines.map((result: Result) => {
             const lineId = result.quest_id + '-' + result.text_id
-            console.log(result.level)
             return (
               <div key={lineId}>
                 <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
