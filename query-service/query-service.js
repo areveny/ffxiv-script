@@ -25,8 +25,11 @@ function getStatement(queryProps) {
     if (filters.length > 0) {
         filterText = ` AND ${filters.join(' AND ')}`
     }
-    var preparedStatement = db.prepare(`SELECT * FROM lines INNER JOIN quests WHERE lines.quest_id=quests.quest_id ${filterText} ORDER BY lines.rowid LIMIT 100;`, params)
-    console.log(preparedStatement, filters, params)
+    var preparedStatement = db.prepare(`SELECT * FROM lines 
+        INNER JOIN quests 
+        WHERE lines.quest_id=quests.quest_id ${filterText} 
+        ORDER BY quests.level ASC, lines.rowid ASC
+        LIMIT 100;`, params)
     return preparedStatement
 }
 
@@ -39,10 +42,17 @@ app.get("/", (req, res) => {
 
 app.post("/quest", (req, res) => {
     var startTime = performance.now()
-    var statement = db.prepare('SELECT * FROM lines INNER JOIN quests WHERE lines.quest_id=quests.quest_id AND lines.quest_id=? ORDER BY lines.rowid')
-    statement.all([req.body.questId],
-        function (err, rows) {
-            res.json(rows)
+    var statementLines = db.prepare('SELECT * FROM lines WHERE quest_id=? ORDER BY rowid')
+    var statementQuest = db.prepare(`SELECT * FROM quests INNER JOIN places 
+    WHERE quests.place_id=places.place_id AND quest_id=?`)
+    questIdParam = [req.body.questId]
+    statementLines.all(questIdParam,
+        function (err, lines) {
+            statementQuest.get(questIdParam,
+                function (err, quest) {
+                    var returnObj = { 'lines': lines, 'quest': quest }
+                    res.json(returnObj)
+                })
         })
     var endTime = performance.now()
     console.log(`${moment().format()}: Quest ${req.body.questId} took ${endTime - startTime}`)

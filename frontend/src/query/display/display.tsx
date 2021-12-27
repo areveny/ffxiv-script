@@ -17,6 +17,15 @@ interface DisplayState {
 const useCache = false;
 const cacheSize = 10;
 
+function cleanSpeakerString(matchSpeaker: string) {
+  matchSpeaker = matchSpeaker.replace(/[^\w]/gi, '')
+  matchSpeaker = matchSpeaker.charAt(0).toUpperCase() + matchSpeaker.slice(1).toLowerCase()
+  if (matchSpeaker.indexOf('Crystalexarch') === 0) {
+    return 'Mysteryvoice'
+  }
+  return matchSpeaker
+}
+
 // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
 class Display extends React.Component<DisplayProps, DisplayState> {
 
@@ -29,7 +38,7 @@ class Display extends React.Component<DisplayProps, DisplayState> {
     axios.post(serverUrl,
       {
         'matchString': this.props.matchString,
-        'matchSpeaker': this.props.matchSpeaker,
+        'matchSpeaker': cleanSpeakerString(this.props.matchSpeaker),
       },
       { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {

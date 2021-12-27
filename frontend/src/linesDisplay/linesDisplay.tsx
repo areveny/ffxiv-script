@@ -20,10 +20,17 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
         <div className='display'>
           {this.props.lines.map((result: Result) => {
             const lineId = result.quest_id + '-' + result.text_id
+            console.log(result.level)
             return (
               <div key={lineId}>
                 <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
-                <a className='questName' href={'/quest/' + result.quest_id} key={lineId + '-questName'}>{result.quest_name}</a>
+                <span className='questFull'>{result.level === undefined ? '' : result.level + ' '}
+                  <a className='questName'
+                    href={'/quest/' + result.quest_id}
+                    key={lineId + '-questName'}>
+                    {result.quest_name}
+                  </a>
+                </span>
                 <br />
                 <div className='text' key={lineId + '-container'}>{result.text}</div>
               </div>
@@ -51,12 +58,12 @@ function convertFormatting(line: string, line_name: string) {
     output.push(before)
     output.push(<i key={index}>{formatted}</i>)
 
-      index = index + 1
-      line = line.substring(formatCloseStart + 17)
-      formatStart = line.indexOf('{#DialogueItalicFormat}')
-    }
-    output.push(line)
-    return React.createElement('p', { 'className': 'text-element', 'key': line_name + '-text'}, output)
+    index = index + 1
+    line = line.substring(formatCloseStart + 17)
+    formatStart = line.indexOf('{#DialogueItalicFormat}')
   }
+  output.push(line)
+  return React.createElement('p', { 'className': 'text-element', 'key': line_name + '-text' }, output)
+}
 
 export default LinesDisplay;

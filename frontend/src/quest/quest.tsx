@@ -4,11 +4,12 @@ import { useParams } from 'react-router';
 import LinesDisplay from '../linesDisplay/linesDisplay';
 import Result from '../models/models';
 import { serverUrl } from '../static';
-import { text } from 'node:stream/consumers';
+import './quest.css';
 
 interface QuestState {
     questId: string;
     results: Result[];
+    questResult: QuestResult;
     searched: boolean;
 }
 
@@ -20,6 +21,14 @@ interface Params {
     questId: string;
 }
 
+interface QuestResult {
+    quest_id: string;
+    quest_name: string;
+    level: number;
+    place_id: number;
+    place_name: string;
+}
+
 class Quest extends React.PureComponent<QuestProps, QuestState> {
 
     constructor(props: QuestProps) {
@@ -28,6 +37,7 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
         this.state = {
             'questId': questId,
             'results': new Array<Result>(),
+            'questResult': {} as QuestResult,
             'searched': false
         }
     }
@@ -44,7 +54,11 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
             { 'questId': questId },
             { headers: { 'Content-Type': 'application/json' } })
             .then((response) => {
-                this.setState({ 'results': response.data, 'searched': true })
+                this.setState({
+                    'results': response.data.lines,
+                    'searched': true,
+                    'questResult': response.data.quest
+                })
             })
     }
 
@@ -54,10 +68,13 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
         } else if (this.state.searched && this.state.results.length == 0) {
             return (<p>Quest {this.state.questId} not found.</p>)
         } else {
-                console.log(this.state.results[0])
             return (
                 <div className='quest'>
-                    <h2>{this.state.results.length > 0 ? this.state.results[0].quest_name : ''}</h2>
+                    <div className='questHeader'>
+                        <h2 className='questTitle'>{this.state.questResult.quest_name}</h2>
+                        <span className='questLevel'>Level: {this.state.questResult.level}</span>
+                        <span className='questPlace'>Location: {this.state.questResult.place_name}</span>
+                    </div>
                     <LinesDisplay lines={this.state.results} />
                 </div>
             )

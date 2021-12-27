@@ -7,7 +7,7 @@ interface Result {
     text: string;
     quest_id2: string;
     quest_name: string;
-    quest_level: number;
+    level: number;
     place_id: number;
 
   }

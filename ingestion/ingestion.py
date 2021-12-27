@@ -7,9 +7,9 @@ class Ingestion():
 
     def __init__(self, ingestion_db: ingestion_db.SqliteIngestionDB):
         self.ingestion_db = ingestion_db
-        self.process_quests('raw-data/quest/*/*.csv')
-        self.process_quest_dir('raw-data/Quest.csv')
-        self.process_place_dir('raw-data/PlaceName.csv')
+        # self.process_quests('raw-data/quest/*/*.csv')
+        # self.process_quest_dir('raw-data/Quest.csv')
+        # self.process_place_dir('raw-data/PlaceName.csv')
 
     def process_quests(self, quest_glob):
         quest_files = self.get_quest_files(quest_glob)
@@ -86,5 +86,6 @@ class Ingestion():
 
 
 if __name__ == '__main__':
-    ingestion_db = ingestion_db.SqliteIngestionDB('../query-service/ffxiv.db')
+    ingestion_db = ingestion_db.SqliteIngestionDB('../query-service/ffxiv.db', initialize=False)
     ingest = Ingestion(ingestion_db)
+    quest_files = ingest.get_quest_files('raw-data/quest/*/*.csv')
