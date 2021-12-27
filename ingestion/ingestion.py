@@ -7,12 +7,12 @@ class Ingestion():
 
     def __init__(self, ingestion_db: ingestion_db.SqliteIngestionDB):
         self.ingestion_db = ingestion_db
-        # self.process_quests('raw-data/quest/*/*.csv')
+        self.process_quests('raw-data/quest/*/*.csv')
         self.process_quest_dir('raw-data/Quest.csv')
         self.process_place_dir('raw-data/PlaceName.csv')
 
-    def process_quests(self):
-        quest_files = self.get_quest_files()
+    def process_quests(self, quest_glob):
+        quest_files = self.get_quest_files(quest_glob)
         processed = 0
         for quest_file in quest_files:
             self.process_file(quest_file)
@@ -44,11 +44,11 @@ class Ingestion():
                 id, label, text = row
                 split_label = label.split('_')
                 if len(split_label) == 6:
-                    text_type, quest_label, quest_id, speaker, _, text_line = split_label
+                    text_type, quest_label, quest_id, speaker, _, text_id = split_label
                     full_quest_id = '_'.join((quest_label.lower(), quest_id))
                     speaker = speaker.capitalize()
                     if text:
-                        data_rows.append((full_quest_id, speaker, text))
+                        data_rows.append((full_quest_id, text_id, speaker, text))
                 elif len(split_label) == 5:
                     continue # Character response
         self.ingestion_db.upload_lines(data_rows)
@@ -86,5 +86,5 @@ class Ingestion():
 
 
 if __name__ == '__main__':
-    ingestion_db = ingestion_db.SqliteIngestionDB('../query-service/ffxiv.db', initialize=True)
+    ingestion_db = ingestion_db.SqliteIngestionDB('../query-service/ffxiv.db')
     ingest = Ingestion(ingestion_db)

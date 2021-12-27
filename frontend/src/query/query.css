@@ -20,11 +20,11 @@
   font-size: min(20px, 3vw);
 }
 
-.matchString {
+.matchInput {
   margin-bottom: 12px
 }
 
-.matchString label {
+.matchInput label {
   font-size: min(20px, 3vw);
 }
 

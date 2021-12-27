@@ -6,7 +6,6 @@ interface LinesDisplayProps {
   lines: Result[];
 }
 
-
 class LinesDisplay extends React.Component<LinesDisplayProps, any> {
 
   constructor(props: LinesDisplayProps) {
@@ -20,12 +19,13 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
       return (
         <div className='display'>
           {this.props.lines.map((result: Result) => {
+            const lineId = result.quest_id + '-' + result.text_id
             return (
-              <div key={result.line_name}>
-                <span className='speakerName' key={result.line_name + '-' + result.speaker}>{result.speaker}</span>
-                <a className='conversationName' href={'/conversation/' + result.conversation_name} key={result.line_name + '-' + result.conversation_name}>{result.conversation_name}</a>
+              <div key={lineId}>
+                <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
+                <a className='questName' href={'/quest/' + result.quest_id} key={lineId + '-questName'}>{result.quest_name}</a>
                 <br />
-                <div className='text' key={result.line_name + '-container'}>{convertFormatting(result.text, result.line_name)}</div>
+                <div className='text' key={lineId + '-container'}>{result.text}</div>
               </div>
             )
           })}

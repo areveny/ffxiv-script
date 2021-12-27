@@ -26,8 +26,10 @@ class SqliteIngestionDB(IngestionDB):
         con.execute("""DROP TABLE IF EXISTS lines;""")
         con.execute("""CREATE TABLE lines (
         quest_id TEXT,
+        text_id TEXT,
         speaker TEXT,
-        text TEXT
+        text TEXT,
+        PRIMARY KEY (quest_id, text_id)
         );
         """)
         con.execute("""CREATE INDEX quest_id ON lines (quest_id, speaker);""")
@@ -55,12 +57,10 @@ class SqliteIngestionDB(IngestionDB):
         """)
         con.execute("""CREATE INDEX place_id ON places (place_id);""")
 
-
-
     def upload_lines(self, db_values):
         con = sqlite3.connect(self.db_file)
         with con:
-            con.executemany('INSERT OR REPLACE INTO lines (quest_id, speaker, text) VALUES (?, ?, ?)', db_values)
+            con.executemany('INSERT OR REPLACE INTO lines (quest_id, text_id, speaker, text) VALUES (?, ?, ?, ?)', db_values)
         con.close()
 
     def upload_quests(self, quest_values):

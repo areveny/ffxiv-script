@@ -4,7 +4,7 @@ import './index.css';
 import Query from './query/query.tsx';
 import Header from './header/header.tsx';
 import About from './about/about';
-import Conversation from './conversation/conversation';
+import Quest from './quest/quest';
 import reportWebVitals from './reportWebVitals';
 import {
     BrowserRouter,
@@ -19,7 +19,7 @@ ReactDOM.render(
       <Routes>
         <Route path='/' element={<Query />} />
         <Route path='about' element={<About />} />
-        <Route path='conversation/:conversationName' element={<Conversation />} />
+        <Route path='quest/:questId' element={<Quest />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
