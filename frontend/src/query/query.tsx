@@ -28,7 +28,6 @@ class Query extends React.Component<any, QueryState> {
     var element = (e.currentTarget as HTMLInputElement)
     const {className, value} = (e.currentTarget as HTMLInputElement)
     this.setState({[className]: value } as Pick<State, keyof State>)
-    console.log(this.state)
   }
 
   render() {
