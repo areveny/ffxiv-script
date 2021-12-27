@@ -1,12 +1,8 @@
 .display {
-    width: min(1200px, 95%);
+    width: min(1000px, 95%);
     display: inline-block;
     justify-content: center;
     margin-bottom: 4vw;
-}
-
-.display p {
-    text-align: justify;
 }
 
 .speakerName {
@@ -25,4 +21,10 @@ a:link {
 
 a:visited {
     text-decoration: none;
+}
+
+.text {
+ text-align: left;
+ margin-left: 20px;
+ margin-bottom: 15px;
 }

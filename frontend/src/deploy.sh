@@ -24,4 +24,4 @@ sudo cp ffxiv-script.conf /etc/nginx/conf.d
 sudo systemctl start nginx.service
 
 # Deploy
-scp -r -i --- frontend/build :~/frontend/build
+scp -r -i --- frontend/build :~/frontend
