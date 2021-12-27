@@ -47,9 +47,9 @@ class Display extends React.Component<DisplayProps, DisplayState> {
   componentDidUpdate(prevProps: DisplayProps) {
     var matchSpeakerCleaned = cleanSpeakerString(this.props.matchSpeaker)
     if (this.props.matchString !== prevProps.matchString ||
-      this.props.matchSpeaker != prevProps.matchSpeaker ||
-      this.props.minLevel != prevProps.minLevel ||
-      this.props.maxLevel != prevProps.maxLevel) {
+      this.props.matchSpeaker !== prevProps.matchSpeaker ||
+      this.props.minLevel !== prevProps.minLevel ||
+      this.props.maxLevel !== prevProps.maxLevel) {
       if (speakers.has(matchSpeakerCleaned)) {
         var requestBody = {
           'matchString': this.props.matchString,

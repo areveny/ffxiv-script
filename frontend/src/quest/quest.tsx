@@ -65,7 +65,7 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
     render() {
         if (this.state.questId === '') {
             return
-        } else if (this.state.searched && this.state.results.length == 0) {
+        } else if (this.state.searched && this.state.results.length === 0) {
             return (<p>Quest {this.state.questId} not found.</p>)
         } else {
             return (

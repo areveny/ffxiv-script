@@ -8,10 +8,6 @@ interface LinesDisplayProps {
 
 class LinesDisplay extends React.Component<LinesDisplayProps, any> {
 
-  constructor(props: LinesDisplayProps) {
-    super(props)
-  }
-
   render() {
     if (!this.props.lines) {
       return (<p>No results found.</p>)
