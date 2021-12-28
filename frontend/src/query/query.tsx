@@ -1,6 +1,7 @@
 import { State } from 'history';
 import React from 'react';
 import Display from './display/display';
+import { speakers } from '../static'
 import './query.css';
 
 interface QueryState {
@@ -34,7 +35,19 @@ class Query extends React.Component<any, QueryState> {
     return (
       <div className="query">
         <div className="matchInput">
-          <label> Speaker: <input className='matchSpeaker' type='text' value={this.state.matchSpeaker} onChange={this.handleChange} /> </label>
+          <label> Speaker: 
+            <datalist id='speakers'>
+              {
+                speakers.map((speaker: string) => {
+                  return (
+                  <option>{speaker}</option>
+                  )
+                })
+              }
+
+            </datalist> 
+            <input className='matchSpeaker' autoComplete='on' list='speakers' value={this.state.matchSpeaker} onChange={this.handleChange}/>
+            </label>
         </div>
         <div className="matchInput">
           <label> Match text: <input className='matchString' type='text' value={this.state.matchString} onChange={this.handleChange} /> </label>

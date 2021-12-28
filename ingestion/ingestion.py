@@ -31,6 +31,7 @@ class Ingestion():
 
         return quest_files
 
+
     def process_file(self, quest_file):
         path, dir, filanme = quest_file
         with open(path, 'r') as f:
@@ -62,7 +63,7 @@ class Ingestion():
 
             quest_values = list()
             for row in reader:
-                quest_numerical_id, quest_name, full_quest_id, expansion, class_job_category, quest_level = row[:6]
+                quest_numerical_id, quest_name, full_quest_id, expansion, class_job_category, quest_level = row[:6] # pylint: disable=unused-variable
                 place_name = row[-11]
                 quest_values.append((full_quest_id.lower(), quest_name, quest_level, int(place_name)))
         ingestion_db.upload_quests(quest_values)

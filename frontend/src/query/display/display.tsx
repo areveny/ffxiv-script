@@ -20,10 +20,15 @@ const useCache = false;
 const cacheSize = 10;
 
 function cleanSpeakerString(matchSpeaker: string) {
+  if (matchSpeaker === '') {
+    return ''
+  }
   matchSpeaker = matchSpeaker.replace(/[^\w]/gi, '')
   matchSpeaker = matchSpeaker.charAt(0).toUpperCase() + matchSpeaker.slice(1).toLowerCase()
   if (matchSpeaker.indexOf('Crystalexarch') === 0) {
     return 'Mysteryvoice'
+  } else if (matchSpeaker.indexOf('Venat') === 0) {
+    return 'Venas'
   }
   return matchSpeaker
 }
@@ -45,28 +50,26 @@ class Display extends React.Component<DisplayProps, DisplayState> {
   }
 
   componentDidUpdate(prevProps: DisplayProps) {
-    var matchSpeakerCleaned = cleanSpeakerString(this.props.matchSpeaker)
     if (this.props.matchString !== prevProps.matchString ||
       this.props.matchSpeaker !== prevProps.matchSpeaker ||
       this.props.minLevel !== prevProps.minLevel ||
       this.props.maxLevel !== prevProps.maxLevel) {
-      if (speakers.has(matchSpeakerCleaned)) {
-        var requestBody = {
-          'matchString': this.props.matchString,
-          'matchSpeaker': matchSpeakerCleaned,
-          'minLevel': this.props.minLevel,
-          'maxLevel': this.props.maxLevel
-        }
-        this.runQuery(requestBody)
+      var matchSpeakerCleaned = cleanSpeakerString(this.props.matchSpeaker)
+      var requestBody = {
+        'matchString': this.props.matchString,
+        'matchSpeaker': matchSpeakerCleaned,
+        'minLevel': this.props.minLevel,
+        'maxLevel': this.props.maxLevel
       }
+      this.runQuery(requestBody)
     }
   }
 
-  render() {
-    return (
-      <LinesDisplay lines={this.state.results} />
-    )
-  }
+render() {
+  return (
+    <LinesDisplay lines={this.state.results} />
+  )
+}
 }
 
 export default Display;
