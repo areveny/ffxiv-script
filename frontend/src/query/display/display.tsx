@@ -45,7 +45,9 @@ class Display extends React.Component<DisplayProps, DisplayState> {
     axios.post(serverUrl, requestBody,
       { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {
-        this.setState({ 'results': response.data })
+        if (requestBody.minLevel === this.props.minLevel && requestBody.maxLevel === this.props.maxLevel) {
+          this.setState({ 'results': response.data })
+        }
       })
   }
 
@@ -65,11 +67,11 @@ class Display extends React.Component<DisplayProps, DisplayState> {
     }
   }
 
-render() {
-  return (
-    <LinesDisplay lines={this.state.results} />
-  )
-}
+  render() {
+    return (
+      <LinesDisplay lines={this.state.results} />
+    )
+  }
 }
 
 export default Display;

@@ -23,11 +23,11 @@ function getStatement(queryProps) {
         params.push(queryProps.matchSpeaker)
     }
     if (queryProps.minLevel > 1) {
-        filters.push(' quests.level>?')
+        filters.push(' quests.level>=?')
         params.push(queryProps.minLevel)
     }
     if (queryProps.maxLevel < 90) {
-        filters.push(' quests.level<?')
+        filters.push(' quests.level<=?')
         params.push(queryProps.maxLevel)
     }
     if (filters.length > 0) {

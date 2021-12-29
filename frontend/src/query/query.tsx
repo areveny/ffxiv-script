@@ -46,7 +46,7 @@ class Query extends React.Component<any, QueryState> {
               }
 
             </datalist> 
-            <input className='matchSpeaker' autoComplete='on' list='speakers' value={this.state.matchSpeaker} onChange={this.handleChange}/>
+            <input className='matchSpeaker' autoComplete='on' list='speakers'  onChange={this.handleChange}/>
             </label>
         </div>
         <div className="matchInput">
