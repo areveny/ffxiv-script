@@ -25,3 +25,9 @@ sudo systemctl start nginx.service
 
 # Deploy
 scp -r -i --- frontend/build :~/frontend
+
+# Certbot
+sudo amazon-linux-extras install epel -y
+sudo yum install certbot-apache -y
+sudo yum install python-certbot-nginx -y
+sudo certbot --nginx

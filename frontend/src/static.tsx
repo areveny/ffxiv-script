@@ -1,4 +1,4 @@
-var url = 'http://ffxiv-script.com:4000'
+var url = 'https://ffxiv-script.com/api'
 
 if (process.env.NODE_ENV === 'development') {
     url = 'http://localhost:4000'
