@@ -50,7 +50,7 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
     }
 
     queryQuest = (questId: string) => {
-        axios.post(`${serverUrl}/quest`,
+        axios.post(`${serverUrl}quest`,
             { 'questId': questId },
             { headers: { 'Content-Type': 'application/json' } })
             .then((response) => {
