@@ -29,6 +29,7 @@ class SqliteIngestionDB(IngestionDB):
         text_id TEXT,
         speaker TEXT,
         text TEXT,
+        quest_patch TEXT,
         PRIMARY KEY (quest_id, text_id)
         );
         """)
