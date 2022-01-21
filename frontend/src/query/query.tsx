@@ -40,7 +40,7 @@ class Query extends React.Component<any, QueryState> {
               {
                 speakers.map((speaker: string) => {
                   return (
-                  <option>{speaker}</option>
+                  <option key={speaker}>{speaker}</option>
                   )
                 })
               }

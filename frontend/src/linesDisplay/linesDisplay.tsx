@@ -8,6 +8,32 @@ interface LinesDisplayProps {
 
 class LinesDisplay extends React.Component<LinesDisplayProps, any> {
 
+
+  getCollectionInfo = (lineId: String, result: Result) => {
+    if (result.quest_id.indexOf('VoiceMan') != -1) {
+    return (
+      <span className='full'>{result.level === undefined ? '' : `Cutscene file ${result.quest_id.substring(result.quest_id.length - 1)} from patch `}
+        <a className='cutsceneName'
+          href={'/cutscene/' + result.quest_id}
+          key={lineId + '-questName'}>
+          {result.quest_name}
+        </a>
+      </span>
+    )
+
+    } else {
+    return (
+      <span className='full'>{result.level === undefined ? '' : result.level + ' '}
+        <a className='questName'
+          href={'/quest/' + result.quest_id}
+          key={lineId + '-questName'}>
+          {result.quest_name}
+        </a>
+      </span>
+    )
+    }
+  }
+
   render() {
     if (!this.props.lines) {
       return (<p>No results found.</p>)
@@ -17,17 +43,13 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
           {this.props.lines.map((result: Result) => {
             const lineId = result.quest_id + '-' + result.text_id
             return (
-              <div key={lineId}>
-                <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
-                <span className='questFull'>{result.level === undefined ? '' : result.level + ' '}
-                  <a className='questName'
-                    href={'/quest/' + result.quest_id}
-                    key={lineId + '-questName'}>
-                    {result.quest_name}
-                  </a>
-                </span>
-                <br />
-                <div className='text' key={lineId + '-container'}>{result.text}</div>
+              <div key={lineId + '-container'}>
+                  {this.getCollectionInfo(lineId, result)}
+                <div key={lineId}>
+                  <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
+                  <br />
+                  <div className='text' key={lineId + '-text-container'}>{result.text}</div>
+                </div>
               </div>
             )
           })}

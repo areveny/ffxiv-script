@@ -1,7 +1,7 @@
 var url = 'https://ffxiv-script.com/api/'
 
 if (process.env.NODE_ENV === 'development') {
-    url = 'http://localhost:4000'
+    url = 'http://localhost:4000/'
 }
 
 export const serverUrl = url;

@@ -31,11 +31,11 @@ function getStatement(queryProps) {
         params.push(queryProps.maxLevel)
     }
     if (filters.length > 0) {
-        filterText = ` AND ${filters.join(' AND ')}`
+        filterText = filters.join(' AND ')
     }
     var preparedStatement = db.prepare(`SELECT * FROM lines 
         INNER JOIN quests 
-        WHERE lines.quest_id=quests.quest_id ${filterText} 
+        ON lines.quest_id=quests.quest_id WHERE ${filterText} 
         ORDER BY quests.level ASC, lines.rowid ASC
         LIMIT 500;`, params)
     return preparedStatement
@@ -51,8 +51,7 @@ app.get("/", (req, res) => {
 app.post("/quest", (req, res) => {
     var startTime = performance.now()
     var statementLines = db.prepare('SELECT * FROM lines WHERE quest_id=? ORDER BY rowid')
-    var statementQuest = db.prepare(`SELECT * FROM quests INNER JOIN places 
-    WHERE quests.place_id=places.place_id AND quest_id=?`)
+    var statementQuest = db.prepare('SELECT * FROM quests LEFT JOIN places ON quests.place_id=places.place_id WHERE quest_id=?')
     questIdParam = [req.body.questId]
     statementLines.all(questIdParam,
         function (err, lines) {

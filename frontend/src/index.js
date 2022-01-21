@@ -20,6 +20,7 @@ ReactDOM.render(
         <Route path='/' element={<Query />} />
         <Route path='about' element={<About />} />
         <Route path='quest/:questId' element={<Quest />} />
+        <Route path='cutscene/:questId' element={<Quest />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

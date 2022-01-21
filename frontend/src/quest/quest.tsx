@@ -5,6 +5,7 @@ import LinesDisplay from '../linesDisplay/linesDisplay';
 import Result from '../models/models';
 import { serverUrl } from '../static';
 import './quest.css';
+import { resourceLimits } from 'worker_threads';
 
 interface QuestState {
     questId: string;
@@ -54,6 +55,7 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
             { 'questId': questId },
             { headers: { 'Content-Type': 'application/json' } })
             .then((response) => {
+                console.log(response.data)
                 this.setState({
                     'results': response.data.lines,
                     'searched': true,
@@ -71,9 +73,9 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
             return (
                 <div className='quest'>
                     <div className='questHeader'>
-                        <h2 className='questTitle'>{this.state.questResult.quest_name}</h2>
-                        <span className='questLevel'>Level: {this.state.questResult.level}</span>
-                        <span className='questPlace'>Location: {this.state.questResult.place_name}</span>
+                        <h2 className='questTitle'>{this.state.questResult.place_name === null ? `Cutscene file ${this.state.questResult.quest_id} from patch `: ''} {this.state.questResult.quest_name}</h2>
+                        <span className='questLevel'>{this.state.questResult.place_name !== null ? `Level: ${this.state.questResult.level}`: ''}</span>
+                        <span className='questPlace'>{this.state.questResult.place_name ? `Location: ${this.state.questResult.place_name}` : ''}</span>
                     </div>
                     <LinesDisplay lines={this.state.results} />
                 </div>
