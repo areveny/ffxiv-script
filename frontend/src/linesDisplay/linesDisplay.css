@@ -1,5 +1,5 @@
 .display {
-    width: min(1000px, 95%);
+    width: min(1000px, 95vw);
     display: inline-block;
     justify-content: center;
     margin-bottom: 4vw;
