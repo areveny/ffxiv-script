@@ -9,9 +9,7 @@ function About() {
 
       <p>This would not be possible without the efforts of FFXIV dataminers at <a href="https://github.com/xivapi/ffxiv-datamining">ffxiv-datamining</a> and <a href="https://github.com/xivapi/SaintCoinach">Saint Coinach</a>.</p>
 
-      <p>This site is in very early development. Cutscene text is forthcoming and will probably not be correctly organized chronologically.</p>
-
-      <p>This site is made by <a href="http://thixotrofic.com">Thixotrofic</a>. For feedback and requests, you can use email at <a href='mailto:self@areveny.com'>self@areveny.com</a> or Twitter at <a href='https://twitter.com/Thixotrofic/'>@Thixotrofic</a>.</p>
+      <p>This site is made by <a href="https://areveny.com">Areveny</a>. For feedback and requests, you can use email at <a href='mailto:self@areveny.com'>self@areveny.com</a> or Twitter at <a href='https://twitter.com/areveny/'>@areveny</a>.</p>
 
       <p>The source code is available on <a href='https://github.com/areveny/ffxiv-script'>my GitHub</a>.</p>
 

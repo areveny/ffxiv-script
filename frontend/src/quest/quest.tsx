@@ -55,7 +55,6 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
             { 'questId': questId },
             { headers: { 'Content-Type': 'application/json' } })
             .then((response) => {
-                console.log(response.data)
                 this.setState({
                     'results': response.data.lines,
                     'searched': true,
@@ -65,8 +64,8 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
     }
 
     render() {
-        if (this.state.questId === '') {
-            return
+        if (this.state.searched === false) {
+            return null;
         } else if (this.state.searched && this.state.results.length === 0) {
             return (<p>Quest {this.state.questId} not found.</p>)
         } else {
