@@ -11,26 +11,26 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
 
   getCollectionInfo = (lineId: String, result: Result) => {
     if (result.quest_id.indexOf('VoiceMan') != -1) {
-    return (
-      <span className='full'>{result.level === undefined ? '' : `Cutscene file ${result.quest_id.substring(result.quest_id.length - 1)} from patch `}
-        <a className='cutsceneName'
-          href={'/cutscene/' + result.quest_id}
-          key={lineId + '-questName'}>
-          {result.quest_name}
-        </a>
-      </span>
-    )
+      return (
+        <span className='full'>{result.level === undefined ? '' : `Cutscene file ${result.quest_id.substring(result.quest_id.length - 1)} from patch `}
+          <a className='cutsceneName'
+            href={'/cutscene/' + result.quest_id}
+            key={lineId + '-questName'}>
+            {result.quest_name}
+          </a>
+        </span>
+      )
 
     } else {
-    return (
-      <span className='full'>{result.level === undefined ? '' : result.level + ' '}
-        <a className='questName'
-          href={'/quest/' + result.quest_id}
-          key={lineId + '-questName'}>
-          {result.quest_name}
-        </a>
-      </span>
-    )
+      return (
+        <span className='full'>{result.level === undefined ? '' : result.level + ' '}
+          <a className='questName'
+            href={'/quest/' + result.quest_id}
+            key={lineId + '-questName'}>
+            {result.quest_name}
+          </a>
+        </span>
+      )
     }
   }
 
@@ -44,7 +44,7 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
             const lineId = result.quest_id + '-' + result.text_id
             return (
               <div key={lineId + '-container'}>
-                  {this.getCollectionInfo(lineId, result)}
+                {this.getCollectionInfo(lineId, result)}
                 <div key={lineId}>
                   <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
                   <br />
