@@ -5,7 +5,6 @@ import LinesDisplay from '../linesDisplay/linesDisplay';
 import Result from '../models/models';
 import { serverUrl } from '../static';
 import './quest.css';
-import { resourceLimits } from 'worker_threads';
 
 interface QuestState {
     questId: string;

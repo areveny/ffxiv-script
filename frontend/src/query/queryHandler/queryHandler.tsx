@@ -3,16 +3,16 @@ import axios from 'axios';
 import LinesDisplay from '../../linesDisplay/linesDisplay';
 import Result from '../../models/models';
 import { serverUrl, speakers } from '../../static';
-import './display.css';
+import './queryHandler.css';
 
-interface DisplayProps {
+interface QueryHandlerProps {
   matchString: string;
   matchSpeaker: string;
   minLevel: number;
   maxLevel: number;
 }
 
-interface DisplayState {
+interface QueryHandlerState {
   results: Result[];
 }
 
@@ -33,7 +33,7 @@ function cleanSpeakerString(matchSpeaker: string): string {
   return matchSpeaker;
 }
 
-function clientCanFilterResults(curProps: DisplayProps, prevProps: DisplayProps): boolean {
+function clientCanFilterResults(curProps: QueryHandlerProps, prevProps: QueryHandlerProps): boolean {
   let sameSpeaker = curProps.matchSpeaker === prevProps.matchSpeaker;
   let matchSubstring: boolean = prevProps.matchString.length === curProps.matchString.length - 1 &&
     curProps.matchString.indexOf(prevProps.matchString) !== -1;
@@ -41,22 +41,22 @@ function clientCanFilterResults(curProps: DisplayProps, prevProps: DisplayProps)
   return sameSpeaker && (matchSubstring && restrictedLevels);
 }
 
-function getCacheKey(requestBody: DisplayProps): string {
+function getCacheKey(requestBody: QueryHandlerProps): string {
   return [requestBody.matchSpeaker, requestBody.matchString, requestBody.maxLevel, requestBody.minLevel].join("&");
 }
 
 // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-class Display extends React.Component<DisplayProps, DisplayState> {
+class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState> {
 
   private cache?: Map<string, Result[]>;
 
-  constructor(props: DisplayProps) {
+  constructor(props: QueryHandlerProps) {
     super(props);
     this.state = { 'results': new Array<Result>() };
     this.cache = useCache ? new Map<string, Result[]>(): undefined;
   }
 
-  updateCache = (requestBody: DisplayProps, results: Result[]): void => {
+  updateCache = (requestBody: QueryHandlerProps, results: Result[]): void => {
     if (this.cache === undefined) {
       return;
     }
@@ -66,7 +66,7 @@ class Display extends React.Component<DisplayProps, DisplayState> {
     }
   }
 
-  runQuery = (requestBody: DisplayProps): void => {
+  runQuery = (requestBody: QueryHandlerProps): void => {
     axios.post(serverUrl, requestBody,
       { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {
@@ -79,7 +79,7 @@ class Display extends React.Component<DisplayProps, DisplayState> {
       })
   }
 
-  filterResults = (requestBody: DisplayProps): void => {
+  filterResults = (requestBody: QueryHandlerProps): void => {
     let filteredResults: Result[] = this.state.results.filter(result =>
       result.text.indexOf(requestBody.matchString) !== -1 &&
       result.level >= requestBody.minLevel &&
@@ -90,7 +90,7 @@ class Display extends React.Component<DisplayProps, DisplayState> {
     }
   }
 
-  componentDidUpdate(prevProps: DisplayProps) {
+  componentDidUpdate(prevProps: QueryHandlerProps) {
     let stringChanged: boolean = this.props.matchString !== prevProps.matchString;
     let speakerChanged: boolean = this.props.matchSpeaker !== prevProps.matchSpeaker;
     let minChanged: boolean = this.props.minLevel !== prevProps.minLevel;
@@ -131,4 +131,4 @@ class Display extends React.Component<DisplayProps, DisplayState> {
   }
 }
 
-export default Display;
+export default QueryHandler;

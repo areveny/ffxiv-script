@@ -10,7 +10,7 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
 
 
   getCollectionInfo = (lineId: String, result: Result) => {
-    if (result.quest_id.indexOf('VoiceMan') != -1) {
+    if (result.quest_id.indexOf('VoiceMan') !== -1) {
       return (
         <span className='full'>{result.level === undefined ? '' : `Cutscene file ${result.quest_id.substring(result.quest_id.length - 1)} from patch `}
           <a className='cutsceneName'

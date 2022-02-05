@@ -1,6 +1,6 @@
 import { State } from 'history';
 import React from 'react';
-import Display from './display/display';
+import QueryHandler from './queryHandler/queryHandler';
 import { speakers } from '../static'
 import './query.css';
 
@@ -26,7 +26,6 @@ class Query extends React.Component<any, QueryState> {
   }
 
   handleChange = (e: React.FormEvent) => {
-    var element = (e.currentTarget as HTMLInputElement)
     const {className, value} = (e.currentTarget as HTMLInputElement)
     this.setState({[className]: value } as Pick<State, keyof State>)
   }
@@ -56,7 +55,7 @@ class Query extends React.Component<any, QueryState> {
           <label> Min level: <input className='minLevel' type='number' value={this.state.minLevel} onChange={this.handleChange} /> </label>
           <label> Max level: <input className='maxLevel' type='number' value={this.state.maxLevel} onChange={this.handleChange} /> </label>
         </div>
-        <Display matchString={this.state.matchString} matchSpeaker={this.state.matchSpeaker} minLevel={this.state.minLevel} maxLevel={this.state.maxLevel}/>
+        <QueryHandler matchString={this.state.matchString} matchSpeaker={this.state.matchSpeaker} minLevel={this.state.minLevel} maxLevel={this.state.maxLevel}/>
       </div>
     );
   }
