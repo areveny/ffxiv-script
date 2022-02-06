@@ -93,7 +93,7 @@ class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState>
   runQuery = (requestBody: RequestBody): void => {
     setTimeout(() => {
       requestBody.matchString === this.props.matchString && axios.post(serverUrl, requestBody,
-        { headers: { 'Content-Type': 'application/json' } })
+        { headers: { 'Content-Type': 'application/json', 'Accept-Encoding': 'gzip,deflate' } })
       .then((response) => {
         if (requestBodyMatch(requestBody, this.props)) {
           this.updateWithResults(requestBody, response.data)

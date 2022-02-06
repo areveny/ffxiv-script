@@ -3,11 +3,13 @@ const cors = require('cors')
 const sqlite3 = require('sqlite3')
 const { performance } = require('perf_hooks')
 const moment = require('moment');
+const compression = require('compression')
 
 var db = new sqlite3.Database('./ffxiv.db')
 
 const app = express()
 app.use(cors({'origin': true}))
+app.use(compression())
 app.use(express.json())
 const port = 4000
 
@@ -43,8 +45,8 @@ function getStatement(queryProps) {
 app.get("/", (req, res) => {
     db.all("SELECT * FROM lines LIMIT 2", function(err, rows) {
         res.json(rows)
+        console.log(`${moment().format()}: GET root`)
     })
-    console.log(`${moment().format()}: GET root`)
 })
 
 app.post("/quest", (req, res) => {
@@ -58,10 +60,10 @@ app.post("/quest", (req, res) => {
                 function (err, quest) {
                     var returnObj = { 'lines': lines, 'quest': quest }
                     res.json(returnObj)
+                    var endTime = performance.now()
+                    console.log(`${moment().format()}: Quest ${req.body.questId} took ${endTime - startTime}`)
                 })
         })
-    var endTime = performance.now()
-    console.log(`${moment().format()}: Quest ${req.body.questId} took ${endTime - startTime}`)
 })
 
 app.post("/", (req, res) => {
@@ -69,9 +71,9 @@ app.post("/", (req, res) => {
     var preparedStatement = getStatement(req.body)
     preparedStatement.all( function (err, rows) {
         res.json(rows)
+        var endTime = performance.now()
+        console.log(`${moment().format()}: Query ${JSON.stringify(req.body)} took ${endTime - startTime}`)
     })
-    var endTime = performance.now()
-    console.log(`${moment().format()}: Query ${JSON.stringify(req.body)} took ${endTime - startTime}`)
 })
 
 
