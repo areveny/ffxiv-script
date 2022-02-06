@@ -37,7 +37,7 @@ function getStatement(queryProps) {
         INNER JOIN quests 
         ON lines.quest_id=quests.quest_id WHERE ${filterText} 
         ORDER BY quests.level ASC, lines.rowid ASC
-        LIMIT 500;`, params)
+        ${queryProps.limitResults ? 'LIMIT 500' : ''};`, params)
     return preparedStatement
 }
 

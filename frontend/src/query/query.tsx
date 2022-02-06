@@ -52,8 +52,8 @@ class Query extends React.Component<any, QueryState> {
           <label> Match text: <input className='matchString' type='text' value={this.state.matchString} onChange={this.handleChange} /> </label>
         </div>
         <div className="levelRange">
-          <label> Min level: <input className='minLevel' type='number' value={this.state.minLevel} onChange={this.handleChange} /> </label>
-          <label> Max level: <input className='maxLevel' type='number' value={this.state.maxLevel} onChange={this.handleChange} /> </label>
+          <label> Min level: <input className='minLevel' type='number' value={this.state.minLevel} onChange={this.handleChange} min={1}/> </label>
+          <label> Max level: <input className='maxLevel' type='number' value={this.state.maxLevel} onChange={this.handleChange} max={90}/> </label>
         </div>
         <QueryHandler matchString={this.state.matchString} matchSpeaker={this.state.matchSpeaker} minLevel={this.state.minLevel} maxLevel={this.state.maxLevel}/>
       </div>

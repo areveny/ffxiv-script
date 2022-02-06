@@ -2,12 +2,27 @@ import React from 'react';
 import Result from '../models/models';
 import './linesDisplay.css';
 
+const DEFAULT_PAGE_SIZE = 50;
+
 interface LinesDisplayProps {
   lines: Result[];
+  limited?: boolean;
+  pageSize?: number;
 }
 
-class LinesDisplay extends React.Component<LinesDisplayProps, any> {
+interface LinesDisplayState {
+  curPage: number;
+}
 
+class LinesDisplay extends React.PureComponent<LinesDisplayProps, LinesDisplayState> {
+
+  private pageSize: number;
+
+  constructor(props: LinesDisplayProps) {
+    super(props);
+    this.state = {"curPage": 1};
+    this.pageSize = (props.pageSize ?? DEFAULT_PAGE_SIZE);
+  }
 
   getCollectionInfo = (lineId: String, result: Result) => {
     if (result.quest_id.indexOf('VoiceMan') !== -1) {
@@ -19,7 +34,7 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
             {result.quest_name}
           </a>
         </span>
-      )
+      );
 
     } else {
       return (
@@ -30,29 +45,54 @@ class LinesDisplay extends React.Component<LinesDisplayProps, any> {
             {result.quest_name}
           </a>
         </span>
-      )
+      );
     }
+  }
+
+  componentDidUpdate(prevProps: LinesDisplayProps) {
+    if (!prevProps.limited && this.props.lines !== prevProps.lines) {
+      this.setState({'curPage': 1});
+    }
+  }
+
+  getPageSelector = () => {
+    return (
+          <div className='pageSelect'>
+            <label>Page: <input className='pageBox' type='number' 
+            value={this.state.curPage}
+            onChange={this.setPage} 
+            min={1} max={Math.ceil(this.props.lines.length / this.pageSize)}/> </label>
+          </div>
+    )
+  }
+
+  setPage = (e: React.FormEvent<HTMLInputElement>) => {
+    this.setState({'curPage': parseInt(e.currentTarget.value)});
   }
 
   render() {
     if (!this.props.lines) {
-      return (<p>No results found.</p>)
+      return (<p>No results found.</p>);
     } else {
       return (
         <div className='display'>
-          {this.props.lines.map((result: Result) => {
-            const lineId = result.quest_id + '-' + result.text_id
-            return (
-              <div key={lineId + '-container'}>
-                {this.getCollectionInfo(lineId, result)}
-                <div key={lineId}>
-                  <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
-                  <br />
-                  <div className='text' key={lineId + '-text-container'}>{result.text}</div>
+          {this.pageSize < this.props.lines.length && this.getPageSelector()}
+          <div className='lines'>
+            {this.props.lines.slice((this.state.curPage - 1) * this.pageSize, this.state.curPage * this.pageSize).map((result: Result) => {
+              const lineId: string = result.quest_id + '-' + result.text_id;
+              return (
+                <div key={lineId + '-container'}>
+                  {this.getCollectionInfo(lineId, result)}
+                  <div key={lineId}>
+                    <span className='speakerName' key={lineId + '-speaker'}>{result.speaker}</span>
+                    <br />
+                    <div className='text' key={lineId + '-text-container'}>{result.text}</div>
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              );
+            })}
+          </div>
+          {this.pageSize < this.props.lines.length && this.getPageSelector()}
         </div>
       );
     }

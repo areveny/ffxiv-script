@@ -2,6 +2,7 @@
     width: min(1000px, 95vw);
     display: inline-block;
     justify-content: center;
+    margin-top: 2vw;
     margin-bottom: 4vw;
 }
 
@@ -27,4 +28,8 @@ a:visited {
  text-align: left;
  margin-left: 20px;
  margin-bottom: 15px;
+}
+
+.pageSelect input {
+  width: 40px;
 }

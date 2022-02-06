@@ -75,7 +75,7 @@ class Quest extends React.PureComponent<QuestProps, QuestState> {
                         <span className='questLevel'>{this.state.questResult.place_name !== null ? `Level: ${this.state.questResult.level}`: ''}</span>
                         <span className='questPlace'>{this.state.questResult.place_name ? `Location: ${this.state.questResult.place_name}` : ''}</span>
                     </div>
-                    <LinesDisplay lines={this.state.results} />
+                    <LinesDisplay lines={this.state.results} pageSize={this.state.results.length}/>
                 </div>
             )
         }
