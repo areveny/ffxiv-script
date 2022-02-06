@@ -36,8 +36,7 @@ function getStatement(queryProps) {
     var preparedStatement = db.prepare(`SELECT * FROM lines 
         INNER JOIN quests 
         ON lines.quest_id=quests.quest_id WHERE ${filterText} 
-        ORDER BY quests.level ASC, lines.rowid ASC
-        ${queryProps.limitResults ? 'LIMIT 500' : ''};`, params)
+        ORDER BY quests.level ASC, lines.rowid ASC;`, params)
     return preparedStatement
 }
 

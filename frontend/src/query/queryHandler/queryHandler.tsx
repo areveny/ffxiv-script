@@ -14,7 +14,7 @@ interface QueryHandlerProps {
 
 interface QueryHandlerState {
   results: Result[];
-  limited?: boolean;
+  requestBody?: RequestBody;
 }
 
 interface RequestBody {
@@ -22,7 +22,6 @@ interface RequestBody {
   matchSpeaker: string;
   minLevel: number;
   maxLevel: number;
-  limitResults?: boolean;
 }
 
 const useCache = true;
@@ -52,10 +51,16 @@ function clientCanFilterResults(curProps: QueryHandlerProps, prevProps: QueryHan
   return sameSpeaker && (matchSubstring && restrictedLevels);
 }
 
-
-function getCacheKey(requestBody: QueryHandlerProps): string {
+function getCacheKey(requestBody: RequestBody): string {
   return [requestBody.matchSpeaker, requestBody.matchString, requestBody.maxLevel, requestBody.minLevel].join("&");
 }
+
+function requestBodyMatch(requestBody1: RequestBody | QueryHandlerProps, requestBody2: RequestBody | QueryHandlerProps): boolean {
+    return requestBody1.matchSpeaker === requestBody2.matchSpeaker &&
+    requestBody1.matchString === requestBody2.matchString &&
+    requestBody1.minLevel === requestBody2.minLevel &&
+    requestBody1.maxLevel === requestBody2.maxLevel
+  }
 
 // https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
 class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState> {
@@ -68,7 +73,7 @@ class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState>
     this.cache = useCache ? new Map<string, Result[]>() : undefined;
   }
 
-  updateCache = (requestBody: QueryHandlerProps, results: Result[]): void => {
+  updateCache = (requestBody: RequestBody, results: Result[]): void => {
     if (this.cache === undefined) {
       return;
     }
@@ -78,55 +83,44 @@ class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState>
     }
   }
 
-  runQuery = (requestBody: RequestBody, limitResults?: boolean): void => {
-    requestBody.limitResults = limitResults;
-    axios.post(serverUrl, requestBody,
-      { headers: { 'Content-Type': 'application/json' } })
-      .then((response) => {
-        if (requestBody.matchString === this.props.matchString &&
-          requestBody.minLevel === this.props.minLevel &&
-          requestBody.maxLevel === this.props.maxLevel) {
-          this.setState({ 'results': response.data, 'limited': limitResults });
-          if (limitResults && response.data.length === LIMITED_RESULT_SIZE) {
-            setTimeout(() => { requestBody.matchString === this.props.matchString && this.runQuery(requestBody, false) }, 1000);
-          } else {
-            if (useCache) {
-              this.updateCache(requestBody, response.data);
-            }
-          }
-        }
-      })
+  updateWithResults = (requestBody: RequestBody, results: Result[]): void => {
+    this.setState({ 'results': results, 'requestBody': requestBody });
+    if (useCache) {
+      this.updateCache(requestBody, results);
+    }
   }
 
-  filterResults = (requestBody: QueryHandlerProps): void => {
+  runQuery = (requestBody: RequestBody): void => {
+    setTimeout(() => {
+      requestBody.matchString === this.props.matchString && axios.post(serverUrl, requestBody,
+        { headers: { 'Content-Type': 'application/json' } })
+      .then((response) => {
+        if (requestBodyMatch(requestBody, this.props)) {
+          this.updateWithResults(requestBody, response.data)
+        }
+      })
+    }, 200)
+  }
+
+  filterResults = (requestBody: RequestBody): void => {
     let filteredResults: Result[] = this.state.results.filter(result =>
       result.text.indexOf(requestBody.matchString) !== -1 &&
       result.level >= requestBody.minLevel &&
       result.level <= requestBody.maxLevel);
-    if (requestBody.matchString === this.props.matchString &&
-      requestBody.minLevel === this.props.minLevel &&
-      requestBody.maxLevel === this.props.maxLevel) {
-      this.setState({ 'results': filteredResults });
-      if (useCache) {
-        this.updateCache(requestBody, filteredResults);
-      }
+    if (requestBodyMatch(requestBody, this.props)) {
+      this.updateWithResults(requestBody, filteredResults)
     }
   }
 
   componentDidUpdate(prevProps: QueryHandlerProps) {
-    let stringChanged: boolean = this.props.matchString !== prevProps.matchString;
-    let speakerChanged: boolean = this.props.matchSpeaker !== prevProps.matchSpeaker;
-    let minChanged: boolean = this.props.minLevel !== prevProps.minLevel;
-    let maxChanged: boolean = this.props.maxLevel !== prevProps.maxLevel;
-    if (stringChanged || speakerChanged || minChanged || maxChanged) {
-      console.log(this.cache);
+    if (!requestBodyMatch(this.props, prevProps)) {
       if (this.props.matchString === '' && this.props.matchSpeaker === '') {
         this.setState({ 'results': [] });
         return;
       }
       var matchSpeakerCleaned = cleanSpeakerString(this.props.matchSpeaker)
       if (matchSpeakerCleaned === '' || speakers.includes(matchSpeakerCleaned)) {
-        var requestBody = {
+        var requestBody: RequestBody = {
           'matchString': this.props.matchString,
           'matchSpeaker': matchSpeakerCleaned,
           'minLevel': this.props.minLevel,
@@ -143,10 +137,10 @@ class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState>
             return;
           }
         }
-        if (this.state.results.length > 0 && this.state.results.length != LIMITED_RESULT_SIZE && clientCanFilterResults(this.props, prevProps)) {
+        if (this.state.results.length > 0 && this.state.requestBody && clientCanFilterResults(this.props, this.state.requestBody)) {
           this.filterResults(requestBody);
         } else {
-          this.runQuery(requestBody, true);
+          this.runQuery(requestBody);
         }
       }
     }
@@ -154,7 +148,7 @@ class QueryHandler extends React.Component<QueryHandlerProps, QueryHandlerState>
 
   render() {
     return (
-      <LinesDisplay lines={this.state.results} limited={this.state.limited} />
+      <LinesDisplay lines={this.state.results} />
     );
   }
 }

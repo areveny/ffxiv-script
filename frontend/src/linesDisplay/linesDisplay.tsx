@@ -6,7 +6,6 @@ const DEFAULT_PAGE_SIZE = 50;
 
 interface LinesDisplayProps {
   lines: Result[];
-  limited?: boolean;
   pageSize?: number;
 }
 
@@ -50,7 +49,7 @@ class LinesDisplay extends React.PureComponent<LinesDisplayProps, LinesDisplaySt
   }
 
   componentDidUpdate(prevProps: LinesDisplayProps) {
-    if (!prevProps.limited && this.props.lines !== prevProps.lines) {
+    if (this.props.lines !== prevProps.lines) {
       this.setState({'curPage': 1});
     }
   }
